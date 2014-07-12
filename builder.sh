@@ -35,24 +35,34 @@ FILEPHID=`echo "$FILEMSG" | arc call-conduit file.upload --conduit-uri=$CONDUITU
 FILEMSG2="{\"phid\":$FILEPHID}"
 # Get File identifier
 FID=`echo "$FILEMSG2" | arc call-conduit file.info --conduit-uri=$CONDUITURI | jq '.response.id | tonumber'`
-FILEID="{F$FID}"
+FILEID="F$FID"
 
 # Grab testsuite results
-SUMMARY=`cat testsuite_summary.txt | sed 's:\\":\\\\":g'`
+if [ -f "testsuite_summary.txt" ]; then
+  SUMMARY=`cat testsuite_summary.txt | sed 's:\\":\\\\":g'`
+fi
 
 # Post back to Harbormaster about the build status
 PASSMSG="{\"buildTargetPHID\":\"$PHID\",\"type\":\"pass\"}"
 FAILMSG="{\"buildTargetPHID\":\"$PHID\",\"type\":\"fail\"}"
 
 if [ "x$BUILDRES" = "x0" ]; then
-  echo "$PASSMSG" | arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
+  echo "$PASSMSG" \
+    | arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
 else
-  echo "$FAILMSG" | arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
+  echo "$FAILMSG" \
+    | arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
 fi
 
 # Post passing/failing comment on the revision.
-PASSMSG="Yay! Build D$REVISION/B$BUILDID: Diff $DIFF has **succeeded**! Full logs available at $FILEID."
-FAILMSG="Whoops, Build D$REVISION/B$BUILDID: Diff $DIFF has **failed**! Full logs available at $FILEID. The testsuite summary sez:\\n\`\`\`lang=txt,name=testsuite_summary.txt,counterexample\\n$SUMMARY\\n\`\`\`"
+PASSMSG ="Yay! Build D$REVISION/B$BUILDID: Diff $DIFF has **succeeded**! "
+PASSMSG+="Full logs available at $FILEID."
+FAILMSG ="Whoops, Build D$REVISION/B$BUILDID: Diff $DIFF has **failed**! "
+FAILMSG+="Full logs available at $FILEID."
+
+if [ -if "testsuite_summary.txt" ]; then
+  FAILMSG+=" The testsuite summary sez:\\n\`\`\`lang=txt,name=testsuite_summary.txt,counterexample\\n$SUMMARY\\n\`\`\`"
+fi
 
 if [ "x$BUILDRES" = "x0" ]; then
   echo "{\"revision_id\":\"$REVISION\",\"message\":\"$PASSMSG\"}" \
