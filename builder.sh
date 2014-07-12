@@ -38,7 +38,7 @@ FID=`echo "$FILEMSG2" | arc call-conduit file.info --conduit-uri=$CONDUITURI | j
 FILEID="{F$FID}"
 
 # Grab testsuite results
-SUMMARY=`cat testsuite_summary.txt | sed ':a;N;$!ba;s/\n/\\\\\\\\n/g'`
+SUMMARY=`cat testsuite_summary.txt | sed 's:\\":\\\\":g'`
 
 # Post back to Harbormaster about the build status
 PASSMSG="{\"buildTargetPHID\":\"$PHID\",\"type\":\"pass\"}"
@@ -52,12 +52,13 @@ fi
 
 # Post passing/failing comment on the revision.
 PASSMSG="Yay! Build B$BUILDID (D$REVISION, Diff $DIFF) has **succeeded**! Full logs available at $FILEID."
-FAILMSG="Whoops, Build B$BUILDID (D$REVISION, Diff $DIFF) has **failed**! Full logs available at $FILEID. The testsuite summary sez:\\\\n\`\`\`lang=txt,name=testsuite_summary.txt,counterexample\\\\n$SUMMARY\\\\n\`\`\`"
+FAILMSG="Whoops, Build B$BUILDID (D$REVISION, Diff $DIFF) has **failed**! Full logs available at $FILEID. The testsuite summary sez:\\n\`\`\`lang=txt,name=testsuite_summary.txt,counterexample\\n$SUMMARY\\n\`\`\`"
 
 if [ "x$BUILDRES" = "x0" ]; then
   echo "{\"revision_id\":\"$REVISION\",\"message\":\"$PASSMSG\"}" \
     | arc call-conduit differential.createcomment --conduit-uri=$CONDUITURI
 else
+
   echo "{\"revision_id\":\"$REVISION\",\"message\":\"$FAILMSG\"}" \
     | arc call-conduit differential.createcomment --conduit-uri=$CONDUITURI
 fi
