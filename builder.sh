@@ -30,9 +30,9 @@ BUILDRES=$?
 LOGS=`cat ./validate.log | gzip | base64`
 FILEMSG="{\"data_base64\":\"$LOGS\",\"name\":\"ghc-build-B$BUILDID-D$REVISION-d$DIFF.txt.gz\"}"
 # Get PHID from response
-PHID=`echo "$FILEMSG" | arc call-conduit file.upload --conduit-uri=$CONDUITURI | jq '.response'`
+FILEPHID=`echo "$FILEMSG" | arc call-conduit file.upload --conduit-uri=$CONDUITURI | jq '.response'`
 
-FILEMSG2="{\"phid\":$PHID}"
+FILEMSG2="{\"phid\":$FILEPHID}"
 # Get File identifier
 FID=`echo "$FILEMSG2" | arc call-conduit file.info --conduit-uri=$CONDUITURI | jq '.response.id | tonumber'`
 FILEID="{F$FID}"
@@ -42,9 +42,9 @@ PASSMSG="{\"buildTargetPHID\":\"$PHID\",\"type\":\"pass\"}"
 FAILMSG="{\"buildTargetPHID\":\"$PHID\",\"type\":\"fail\"}"
 
 if [ "x$BUILDRES" = "x0" ]; then
-  echo "'$PASSMSG'" #| arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
+  echo "$PASSMSG" #| arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
 else
-  echo "'$FAILMSG'" #| arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
+  echo "$FAILMSG" #| arc call-conduit harbormaster.sendmessage --conduit-uri=$CONDUITURI
 fi
 
 # Post passing/failing comment on the revision.
@@ -52,9 +52,9 @@ PASSMSG="Yay! Build B$BUILDID (D$REVISION, Diff $DIFF) has **succeeded**! Full l
 FAILMSG="Whoops, Build B$BUILDID (D$REVISION, Diff $DIFF) has **failed**! Full logs available at $FILEID."
 
 if [ "x$BUILDRES" = "x0" ]; then
-  echo "'{\"revision_id\":\"$REVISION\",\"message\":\"$PASSMSG\"}'" #\
+  echo "{\"revision_id\":\"$REVISION\",\"message\":\"$PASSMSG\"}" #\
     #| arc call-conduit differential.createcomment --conduit-uri=$CONDUITURI
 else
-  echo "'{\"revision_id\":\"$REVISION\",\"message\":\"$FAILMSG\"}'" #\
+  echo "{\"revision_id\":\"$REVISION\",\"message\":\"$FAILMSG\"}" #\
     #| arc call-conduit differential.createcomment --conduit-uri=$CONDUITURI
 fi
