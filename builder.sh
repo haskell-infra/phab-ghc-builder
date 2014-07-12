@@ -51,8 +51,8 @@ else
 fi
 
 # Post passing/failing comment on the revision.
-PASSMSG="Yay! Build B$BUILDID (D$REVISION, Diff $DIFF) has **succeeded**! Full logs available at $FILEID."
-FAILMSG="Whoops, Build B$BUILDID (D$REVISION, Diff $DIFF) has **failed**! Full logs available at $FILEID. The testsuite summary sez:\\n\`\`\`lang=txt,name=testsuite_summary.txt,counterexample\\n$SUMMARY\\n\`\`\`"
+PASSMSG="Yay! Build D$REVISION/B$BUILDID: Diff $DIFF has **succeeded**! Full logs available at $FILEID."
+FAILMSG="Whoops, Build D$REVISION/B$BUILDID: Diff $DIFF has **failed**! Full logs available at $FILEID. The testsuite summary sez:\\n\`\`\`lang=txt,name=testsuite_summary.txt,counterexample\\n$SUMMARY\\n\`\`\`"
 
 if [ "x$BUILDRES" = "x0" ]; then
   echo "{\"revision_id\":\"$REVISION\",\"message\":\"$PASSMSG\"}" \
