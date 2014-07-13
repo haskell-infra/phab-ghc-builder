@@ -55,9 +55,9 @@ else
 fi
 
 # Post passing/failing comment on the revision.
-PASSMSG="Yay! Build D$REVISION/B$BUILDID: Diff $DIFF has **succeeded**! "
+PASSMSG="Yay! Build B$BUILDID: Diff $DIFF (D$REVISION) has **succeeded**! "
 PASSMSG+="Full logs available at $FILEID."
-FAILMSG="Whoops, Build D$REVISION/B$BUILDID: Diff $DIFF has **failed**! "
+FAILMSG="Whoops, Build B$BUILDID: Diff $DIFF (D$REVISION) has **failed**! "
 FAILMSG+="Full logs available at $FILEID."
 
 if [ -f "testsuite_summary.txt" ]; then
