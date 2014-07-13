@@ -55,12 +55,12 @@ else
 fi
 
 # Post passing/failing comment on the revision.
-PASSMSG ="Yay! Build D$REVISION/B$BUILDID: Diff $DIFF has **succeeded**! "
+PASSMSG="Yay! Build D$REVISION/B$BUILDID: Diff $DIFF has **succeeded**! "
 PASSMSG+="Full logs available at $FILEID."
-FAILMSG ="Whoops, Build D$REVISION/B$BUILDID: Diff $DIFF has **failed**! "
+FAILMSG="Whoops, Build D$REVISION/B$BUILDID: Diff $DIFF has **failed**! "
 FAILMSG+="Full logs available at $FILEID."
 
-if [ -if "testsuite_summary.txt" ]; then
+if [ -f "testsuite_summary.txt" ]; then
   FAILMSG+=" The testsuite summary sez:\\n\`\`\`lang=txt,name=testsuite_summary.txt,counterexample\\n$SUMMARY\\n\`\`\`"
 fi
 
