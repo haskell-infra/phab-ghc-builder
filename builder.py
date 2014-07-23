@@ -17,7 +17,8 @@ def hello(buildid, diff, revision, phid):
     buildscript = localdir+"/builder.sh"
     subprocess.Popen(["bash", buildscript,
                       str(buildid), str(diff), str(revision), phid])
-    return 'Building B%s: Diff %s from D%s (%s)'%(buildid, diff, revision, phid)
+    r = 'Building B%s: Diff %s from D%s (%s)\n' % (buildid,diff,revision,phid)
+    return r
 
 if __name__ == "__main__":
     app.run()
