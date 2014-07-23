@@ -21,7 +21,7 @@ git clone --recursive git://git.haskell.org/ghc.git
 cd ghc
 
 # Apply patch, perform build
-arc patch --nobranch --diff $DIFF
+arc patch --force --nobranch --diff $DIFF
 NUM_CPUS=3 # TODO FIXME
 CPUS=$NUM_CPUS ./validate 2>&1 > ./validate.log
 BUILDRES=$?
