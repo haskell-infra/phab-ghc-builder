@@ -14,6 +14,8 @@ if [[ -z "$BUILDID" ]] || [[ -z "$DIFF" ]] || [[ -z "$REVISION" ]] || [[ -z "$PH
   exit 1
 fi
 
+echo "Running B$BUILDID: Diff $DIFF from D$REVISION ($PHID)"
+
 # Create a build directory
 cd /srv/ghc-builds
 rm -rf ghc
