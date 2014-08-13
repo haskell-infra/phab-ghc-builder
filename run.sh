@@ -127,6 +127,7 @@ build_ghc_commit() {
     RET=1
   else
     echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
+    mv build-log.txt.xz /srv/logs/r$REPO-B$BUILDID-D$REVISION-$DIFF-logs.txt.xz
   fi
 
   if [ -f "testsuite_summary.txt" ]; then
@@ -222,6 +223,7 @@ build_ghc_diff() {
     RET=1
   else
     echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
+    mv build-log.txt.xz /srv/logs/r$REPO-B$BUILDID-D$REVISION-$DIFF-logs.txt.xz
   fi
 
   if [ -f "testsuite_summary.txt" ]; then
@@ -247,8 +249,8 @@ fi
 if [ "x$ACTION" == "xdiff" ]; then
   REPO=$2
   BUILDID=$3
-  DIFF=$4
-  REVISION=$5
+  REVISION=$4
+  DIFF=$5
   build_ghc_diff
 fi
 
