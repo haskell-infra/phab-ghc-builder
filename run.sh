@@ -71,6 +71,7 @@ build_ghc_commit() {
   waiting_progress 5
   END=$(date +%s.%N)
   if [ "$RESULT" != "0" ]; then
+    echo "ERROR: Couldn't clone git repository!"
     echo "ERROR: Couldn't clone git repository!" >&2
     rm -rf $TEMPLOG $BDIR
     exit 1
@@ -88,6 +89,7 @@ build_ghc_commit() {
   waiting_progress 5
   END=$(date +%s.%N)
   if [ "$RESULT" != "0" ]; then
+    echo "ERROR: Couldn't clone git repository!"
     echo "ERROR: Couldn't clone git repository! Logs:" >&2
     cat build-log.txt >&2
     RET=1
@@ -104,6 +106,7 @@ build_ghc_commit() {
     waiting_progress 20
     END=$(date +%s.%N)
     if [ "$RESULT" != "0" ]; then
+      echo "ERROR: validate failed!"
       echo "ERROR: validate failed! Last 30 lines of log file:" >&2
       tail -30 build-log.txt >&2
       RET=1
@@ -119,6 +122,7 @@ build_ghc_commit() {
   waiting_progress 5
   END=$(date +%s.%N)
   if [ "$RESULT" != "0" ]; then
+    echo "ERROR: log compression failed!"
     echo "ERROR: log compression failed!" >&2
     RET=1
   else
@@ -155,6 +159,7 @@ build_ghc_diff() {
   waiting_progress 5
   END=$(date +%s.%N)
   if [ "$RESULT" != "0" ]; then
+    echo "ERROR: Couldn't clone git repository!"
     echo "ERROR: Couldn't clone git repository!" >&2
     rm -rf $TEMPLOG $BDIR
     exit 1
@@ -172,6 +177,7 @@ build_ghc_diff() {
   waiting_progress 5
   END=$(date +%s.%N)
   if [ "$RESULT" != "0" ]; then
+    echo "ERROR: Couldn't clone git repository!"
     echo "ERROR: Couldn't clone git repository! Logs:" >&2
     cat build-log.txt >&2
     RET=1
@@ -195,6 +201,7 @@ build_ghc_diff() {
     waiting_progress 20
     END=$(date +%s.%N)
     if [ "$RESULT" != "0" ]; then
+      echo "ERROR: validate failed!"
       echo "ERROR: validate failed! Last 30 lines of log file:" >&2
       tail -30 build-log.txt >&2
       RET=1
@@ -210,6 +217,7 @@ build_ghc_diff() {
   waiting_progress 5
   END=$(date +%s.%N)
   if [ "$RESULT" != "0" ]; then
+    echo "ERROR: log compression failed!"
     echo "ERROR: log compression failed!" >&2
     RET=1
   else
