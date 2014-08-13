@@ -148,7 +148,7 @@ build_ghc_diff() {
   # -- Setup git repositories
   echo "Now building B$BUILDID: patch r$REPO/D$REVISION:$DIFF"
   echo    " - Base directory: $BDIR"
-  echo -n " - Cloning repository... "
+  echo -n " - Cloning repository..."
   TEMPLOG=`mktemp /tmp/phab-git-log-XXXXXX.txt`
   START=$(date +%s.%N)
   (git clone git://git.haskell.org/ghc.git $BDIR > $TEMPLOG 2>&1) &
