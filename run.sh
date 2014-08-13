@@ -127,7 +127,7 @@ build_ghc_commit() {
     RET=1
   else
     echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
-    mv build-log.txt.xz /srv/logs/r$REPO-B$BUILDID-D$REVISION-$DIFF-logs.txt.xz
+    mv build-log.txt.xz /srv/logs/r$REPO-B$BUILDID-$COMMIT-logs.txt.xz
   fi
 
   if [ -f "testsuite_summary.txt" ]; then
