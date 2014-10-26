@@ -102,7 +102,7 @@ build_ghc_commit() {
     echo    " - Using $CPUS CPUs on" $(uname -a)
     echo -n " - Running validate..."
     START=$(date +%s.%N)
-    (./validate >> build-log.txt 2>&1) &
+    (./validate --quiet >> build-log.txt 2>&1) &
     waiting_progress 20
     END=$(date +%s.%N)
     if [ "$RESULT" != "0" ]; then
@@ -198,7 +198,7 @@ build_ghc_diff() {
     echo    " - Using $CPUS CPUs on" $(uname -a)
     echo -n " - Running validate..."
     START=$(date +%s.%N)
-    (./validate >> build-log.txt 2>&1) &
+    (./validate --quiet >> build-log.txt 2>&1) &
     waiting_progress 20
     END=$(date +%s.%N)
     if [ "$RESULT" != "0" ]; then
