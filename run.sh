@@ -233,7 +233,7 @@ build_ghc_diff() {
 
     if grep -q '^TEST=' testsuite_summary.txt; then
         # re-run tests w/ high verbosity
-        make -C testsuite VERBOSE=4 $(grep '^TEST=' testsuite_summary.txt)
+        make -C testsuite VERBOSE=4 $(grep '^TEST=' testsuite_summary.txt) | grep -v '^====> Scanning'
     fi
   fi
 
