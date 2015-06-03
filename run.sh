@@ -230,6 +230,11 @@ build_ghc_diff() {
     echo
     echo "================== Testsuite summary =================="
     cat testsuite_summary.txt
+
+    if grep -q '^TEST=' testsuite_summary.txt; then
+        # re-run tests w/ high verbosity
+        make -C testsuite VERBOSE=4 $(grep '^TEST=' testsuite_summary.txt)
+    fi
   fi
 
   rm -rf $BDIR
