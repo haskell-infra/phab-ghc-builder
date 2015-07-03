@@ -177,9 +177,7 @@ build_ghc_diff() {
   # -- Clone submodules
   echo -n " - Updating HEAD and grabbing submodules..."
   START=$(date +%s.%N)
-  (git checkout $COMMIT >> build-log.txt 2>&1 && \
-   git submodule init   >> build-log.txt 2>&1 && \
-   git submodule update >> build-log.txt 2>&1) &
+  (git checkout $COMMIT >> build-log.txt 2>&1) &
   waiting_progress 5
   END=$(date +%s.%N)
   if [ "$RESULT" != "0" ]; then
