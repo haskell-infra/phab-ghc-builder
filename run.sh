@@ -177,6 +177,9 @@ build_ghc_diff() {
   # -- Clone submodules
   echo -n " - Updating HEAD and grabbing submodules..."
   START=$(date +%s.%N)
+  # we do not initialise submodules here to let arc patch change where
+  # submodules are pointing to. Thereby allowing patches affecting submodules to
+  # validate.
   (git checkout $COMMIT >> build-log.txt 2>&1) &
   waiting_progress 5
   END=$(date +%s.%N)
