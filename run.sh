@@ -107,8 +107,8 @@ build_ghc_commit() {
     END=$(date +%s.%N)
     if [ "$RESULT" != "0" ]; then
       echo "ERROR: validate failed!"
-      echo "ERROR: validate failed! Last 30 lines of log file:" >&2
-      tail -30 build-log.txt >&2
+      echo "ERROR: validate failed! Last 1000 lines of log file:" >&2
+      tail -1000 build-log.txt >&2
       RET=1
     else
       echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
@@ -209,8 +209,8 @@ build_ghc_diff() {
     END=$(date +%s.%N)
     if [ "$RESULT" != "0" ]; then
       echo "ERROR: validate failed!"
-      echo "ERROR: validate failed! Last 30 lines of log file:" >&2
-      tail -30 build-log.txt >&2
+      echo "ERROR: validate failed! Last 1000 lines of log file:" >&2
+      tail -1000 build-log.txt >&2
       RET=1
     else
       echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
