@@ -194,7 +194,8 @@ build_ghc_diff() {
     # -- Apply patches
     echo -n " - Applying diff $DIFF via Arcanist... "
     START=$(date +%s.%N)
-    arc patch --force --nocommit --nobranch --diff $DIFF >> build-log.txt 2>&1
+    # Don't use --nocommit and --nobranch at the same time (#4).
+    arc patch --force --nobranch --diff $DIFF >> build-log.txt 2>&1
     END=$(date +%s.%N)
     echo "OK (took about" $(echo "$END - $START" | bc) "seconds)"
 
