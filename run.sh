@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
+
 unset CDPATH
+BASEDIR="/srv"
+export PATH=$HOME/bin:$PATH
 
 ACTION=$1
-export PATH=$HOME/bin:$PATH
 
 # --------------
 # - Detect number of usable CPUs.
@@ -56,7 +58,6 @@ waiting_progress() {
 # all previous commits to build.
 build_ghc_commit() {
   RET=0
-  BASEDIR="/srv"
   BDIR="$BASEDIR/builds/commits/r$REPO/B$BUILDID-$COMMIT"
   cd $BASEDIR
   mkdir -p $BDIR
@@ -150,7 +151,6 @@ build_ghc_commit() {
 #
 build_ghc_diff() {
   RET=0
-  BASEDIR="/srv"
   BDIR="$BASEDIR/builds/patches/r$REPO/B$BUILDID-D$REVISION-$DIFF"
   cd $BASEDIR
   mkdir -p $BDIR
