@@ -66,6 +66,26 @@ clone_ghc() {
     mv $TEMPLOG $BDIR/build-log.txt
 }
 
+# expects cwd == $BDIR
+update_submodules() {
+    echo -n " - Updating HEAD and grabbing submodules..."
+    START=$(date +%s.%N)
+    (git checkout $COMMIT >> build-log.txt 2>&1 && \
+         git submodule init   >> build-log.txt 2>&1 && \
+         git submodule update >> build-log.txt 2>&1) &
+    waiting_progress 5
+    END=$(date +%s.%N)
+    if [ "$RESULT" != "0" ]; then
+        echo "ERROR: Couldn't clone git repository!"
+        echo "ERROR: Couldn't clone git repository! Logs:" >&2
+        cat build-log.txt >&2
+        RET=1
+        return 1
+    else
+        echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
+    fi
+}
+
 # --------------
 # - Build a GHC commit that has been pushed to the repository
 #
@@ -87,19 +107,7 @@ build_ghc_commit() {
   cd $BDIR
 
   # -- Clone submodules
-  echo -n " - Updating HEAD and grabbing submodules..."
-  START=$(date +%s.%N)
-  (git checkout $COMMIT >> build-log.txt 2>&1 && \
-   git submodule init   >> build-log.txt 2>&1 && \
-   git submodule update >> build-log.txt 2>&1) &
-  waiting_progress 5
-  END=$(date +%s.%N)
-  if [ "$RESULT" != "0" ]; then
-    echo "ERROR: Couldn't clone git repository!"
-    echo "ERROR: Couldn't clone git repository! Logs:" >&2
-    cat build-log.txt >&2
-    RET=1
-  else
+  if ! update_submodules; then
     echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
 
     # -- Begin building
