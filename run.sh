@@ -48,6 +48,24 @@ waiting_progress() {
   RESULT=$?
 }
 
+clone_ghc() {
+    BDIR=$1
+    TEMPLOG=`mktemp /tmp/phab-git-log-XXXXXX.txt`
+    echo -n " - Cloning repository..."
+    START=$(date +%s.%N)
+    (git clone git://git.haskell.org/ghc.git $BDIR > $TEMPLOG 2>&1) &
+    waiting_progress 5
+    END=$(date +%s.%N)
+    if [ "$RESULT" != "0" ]; then
+        echo "ERROR: Couldn't clone git repository!"
+        echo "ERROR: Couldn't clone git repository!" >&2
+        rm -rf $TEMPLOG $BDIR
+        exit 1
+    fi
+    echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
+    mv $TEMPLOG $BDIR/build-log.txt
+}
+
 # --------------
 # - Build a GHC commit that has been pushed to the repository
 #
@@ -65,20 +83,7 @@ build_ghc_commit() {
   # -- Setup git repositories
   echo "Now building B$BUILDID: commit r$REPO$COMMIT"
   echo    " - Base directory: $BDIR"
-  echo -n " - Cloning repository..."
-  TEMPLOG=`mktemp /tmp/phab-git-log-XXXXXX.txt`
-  START=$(date +%s.%N)
-  (git clone git://git.haskell.org/ghc.git $BDIR > $TEMPLOG 2>&1) &
-  waiting_progress 5
-  END=$(date +%s.%N)
-  if [ "$RESULT" != "0" ]; then
-    echo "ERROR: Couldn't clone git repository!"
-    echo "ERROR: Couldn't clone git repository!" >&2
-    rm -rf $TEMPLOG $BDIR
-    exit 1
-  fi
-  echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
-  mv $TEMPLOG $BDIR/build-log.txt
+  clone_ghc $BDIR
   cd $BDIR
 
   # -- Clone submodules
@@ -158,20 +163,7 @@ build_ghc_diff() {
   # -- Setup git repositories
   echo "Now building B$BUILDID: patch r$REPO/D$REVISION:$DIFF"
   echo    " - Base directory: $BDIR"
-  echo -n " - Cloning repository..."
-  TEMPLOG=`mktemp /tmp/phab-git-log-XXXXXX.txt`
-  START=$(date +%s.%N)
-  (git clone git://git.haskell.org/ghc.git $BDIR > $TEMPLOG 2>&1) &
-  waiting_progress 5
-  END=$(date +%s.%N)
-  if [ "$RESULT" != "0" ]; then
-    echo "ERROR: Couldn't clone git repository!"
-    echo "ERROR: Couldn't clone git repository!" >&2
-    rm -rf $TEMPLOG $BDIR
-    exit 1
-  fi
-  echo " OK (took about" $(echo "$END - $START" | bc) "seconds)"
-  mv $TEMPLOG $BDIR/build-log.txt
+  clone_ghc $BDIR
   cd $BDIR
 
   # -- Clone submodules
